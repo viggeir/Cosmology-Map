@@ -43,6 +43,147 @@ body {
   position: relative;
 }
 
+
+
+/* ─── INTRO LOADER ─── */
+#intro-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--deep);
+  color: var(--ash);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 28px;
+  opacity: 1;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#intro-loader.done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#loader-stars {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.loader-stage {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 40vh;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+}
+
+.loader-eyebrow {
+  position: relative;
+  z-index: 2;
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 4px;
+  color: #333;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: loaderFadeIn 2.4s ease .2s forwards;
+}
+
+.loader-eyebrow .dot {
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  background: var(--gold-dim);
+  margin: 0 10px 2px;
+  vertical-align: middle;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.loader-ygg {
+  position: relative;
+  z-index: 2;
+  width: min(360px, 70vw);
+  height: min(400px, 70vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: loaderFadeIn 1.6s ease forwards;
+}
+
+.loader-ygg svg { width: 100%; height: 100%; overflow: visible; }
+.loader-ygg-p {
+  fill: none;
+  stroke: var(--gold);
+  stroke-opacity: .65;
+  stroke-width: 1;
+  stroke-linecap: round;
+  transition: stroke-opacity .4s ease;
+}
+.loader-ygg-p.drawn {
+  stroke-opacity: .85;
+  filter: drop-shadow(0 0 3px rgba(200,146,42,.5));
+}
+.loader-ygg-d {
+  fill: rgba(200,146,42,.15);
+  transition: fill .45s ease;
+}
+.loader-ygg-d.lit {
+  fill: var(--gold-bright);
+  filter: drop-shadow(0 0 6px rgba(200,146,42,.8));
+  animation: breathe 3.5s ease-in-out infinite;
+}
+.loader-ygg-d.root.lit { animation-duration: 4.5s; }
+
+.loader-progress {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  font-family: 'Cinzel', serif;
+  color: #333;
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: loaderFadeIn 2.4s ease 1s forwards;
+}
+
+.loader-progress .pct {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--gold-dim);
+  letter-spacing: 0;
+  min-width: 44px;
+}
+
+.loader-progress .track {
+  position: relative;
+  width: min(200px,40vw);
+  height: 1px;
+  background: #1a1a25;
+  overflow: hidden;
+}
+
+.loader-progress .fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, transparent, var(--gold) 30%, var(--gold-bright) 50%, var(--gold) 70%, transparent);
+  width: 0%;
+  transition: width .4s linear;
+}
+
 /* ─── CANVAS LAYER ─── */
 #cosmos-canvas {
   position: absolute;
@@ -670,6 +811,8 @@ body {
   to { text-shadow: 0 0 60px rgba(200,146,42,0.4), 0 0 100px rgba(200,146,42,0.15), 0 0 140px rgba(200,146,42,0.05); }
 }
 
+@keyframes loaderFadeIn { from { opacity:0; transform: translateY(10px);} to { opacity:1; transform: translateY(0);} }
+
 @keyframes pulse {
   0%, 100% { opacity: 0.3; transform: scale(1); }
   50% { opacity: 0.9; transform: scale(1.4); }
@@ -744,6 +887,58 @@ body {
 </style>
 </head>
 <body>
+
+<div id="intro-loader" aria-hidden="true">
+  <canvas id="loader-stars"></canvas>
+  <div class="loader-stage">
+    <div class="loader-eyebrow">THE TREE <span class="dot"></span> REMEMBERS</div>
+    <div class="loader-ygg">
+    <svg viewBox="0 0 320 360" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <radialGradient id="loader-ygg-glow" cx="50%" cy="40%" r="60%">
+          <stop offset="0%" stop-color="#c8922a" stop-opacity="0.35"/>
+          <stop offset="60%" stop-color="#c8922a" stop-opacity="0.04"/>
+          <stop offset="100%" stop-color="#c8922a" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <circle cx="160" cy="150" r="140" fill="url(#loader-ygg-glow)"/>
+      <path class="loader-ygg-p" d="M 160 300 L 160 80"/>
+      <path class="loader-ygg-p" d="M 160 180 Q 110 160 70 130"/>
+      <path class="loader-ygg-p" d="M 160 180 Q 210 160 250 130"/>
+      <path class="loader-ygg-p" d="M 160 140 Q 130 110 95 90"/>
+      <path class="loader-ygg-p" d="M 160 140 Q 190 110 225 90"/>
+      <path class="loader-ygg-p" d="M 160 110 Q 145 90 130 75"/>
+      <path class="loader-ygg-p" d="M 160 110 Q 175 90 190 75"/>
+      <path class="loader-ygg-p" d="M 160 80 Q 140 60 140 45"/>
+      <path class="loader-ygg-p" d="M 160 80 Q 180 60 180 45"/>
+      <path class="loader-ygg-p" d="M 160 80 L 160 40"/>
+      <path class="loader-ygg-p" d="M 160 300 Q 130 315 95 320"/>
+      <path class="loader-ygg-p" d="M 160 300 Q 190 315 225 320"/>
+      <path class="loader-ygg-p" d="M 160 300 L 160 340"/>
+      <path class="loader-ygg-p" d="M 160 310 Q 140 325 115 340"/>
+      <path class="loader-ygg-p" d="M 160 310 Q 180 325 205 340"/>
+      <circle class="loader-ygg-d" cx="70" cy="130" r="3"/>
+      <circle class="loader-ygg-d" cx="250" cy="130" r="3"/>
+      <circle class="loader-ygg-d" cx="95" cy="90" r="2.5"/>
+      <circle class="loader-ygg-d" cx="225" cy="90" r="2.5"/>
+      <circle class="loader-ygg-d" cx="130" cy="75" r="2"/>
+      <circle class="loader-ygg-d" cx="190" cy="75" r="2"/>
+      <circle class="loader-ygg-d" cx="140" cy="45" r="2.2"/>
+      <circle class="loader-ygg-d" cx="180" cy="45" r="2.2"/>
+      <circle class="loader-ygg-d" cx="160" cy="40" r="2.5"/>
+      <circle class="loader-ygg-d root" cx="95" cy="320" r="2.5"/>
+      <circle class="loader-ygg-d root" cx="225" cy="320" r="2.5"/>
+      <circle class="loader-ygg-d root" cx="160" cy="340" r="2.5"/>
+    </svg>
+  </div>
+  <div class="loader-progress">
+    <span>Ferð</span>
+    <span class="track"><span class="fill" id="loader-fill"></span></span>
+    <span class="pct" id="loader-pct">0%</span>
+    </div>
+  </div>
+</div>
+
 
 <canvas id="cosmos-canvas"></canvas>
 
@@ -1977,6 +2172,138 @@ nidhogg: {
 },
 
 }; // end worlds
+
+
+// ─── INTRO LOADER (single play) ───────────────────────
+(function initIntroLoader() {
+  const intro = document.getElementById('intro-loader');
+  if (!intro) return;
+
+  (function loaderStars() {
+    const c = document.getElementById('loader-stars');
+    const ctx = c.getContext('2d');
+    let W = 0, H = 0, dpr = window.devicePixelRatio || 1, stars = [], lines = [];
+    const COLORS = [[212,212,212], [200,146,42], [154,122,184]];
+
+    function resize() {
+      W = c.clientWidth = window.innerWidth;
+      H = c.clientHeight = window.innerHeight;
+      c.width = W * dpr;
+      c.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const count = Math.min(140, Math.round((W * H) / 14000));
+      stars = Array.from({ length: count }, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.1 + 0.2,
+        a: Math.random() * 0.6 + 0.1,
+        c: COLORS[Math.random() < 0.75 ? 0 : (Math.random() < 0.6 ? 1 : 2)],
+        tw: Math.random() * 0.01 + 0.002,
+        ph: Math.random() * 6.28,
+      }));
+      lines = Array.from({ length: 14 }, () => ({
+        x: Math.random() * W,
+        y: -Math.random() * H,
+        len: 80 + Math.random() * 160,
+        sp: 0.15 + Math.random() * 0.35,
+        a: 0.04 + Math.random() * 0.08,
+      }));
+    }
+
+    function frame(t) {
+      if (intro.classList.contains('done')) return;
+      ctx.clearRect(0, 0, W, H);
+      for (const l of lines) {
+        const g = ctx.createLinearGradient(l.x, l.y, l.x, l.y + l.len);
+        g.addColorStop(0, 'rgba(200,146,42,0)');
+        g.addColorStop(0.5, `rgba(200,146,42,${l.a})`);
+        g.addColorStop(1, 'rgba(200,146,42,0)');
+        ctx.strokeStyle = g;
+        ctx.lineWidth = 0.6;
+        ctx.beginPath();
+        ctx.moveTo(l.x, l.y);
+        ctx.lineTo(l.x, l.y + l.len);
+        ctx.stroke();
+        l.y += l.sp;
+        if (l.y > H + 100) {
+          l.y = -l.len - Math.random() * 200;
+          l.x = Math.random() * W;
+        }
+      }
+      for (const s of stars) {
+        const tw = 0.55 + Math.sin(t * s.tw + s.ph) * 0.45;
+        ctx.fillStyle = `rgba(${s.c[0]},${s.c[1]},${s.c[2]},${s.a * tw})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, 6.28);
+        ctx.fill();
+      }
+      requestAnimationFrame(frame);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    requestAnimationFrame(frame);
+  })();
+
+  (function yggReveal() {
+    const paths = Array.from(document.querySelectorAll('.loader-ygg-p'));
+    const dots = Array.from(document.querySelectorAll('.loader-ygg-d'));
+    const fill = document.getElementById('loader-fill');
+    const pctEl = document.getElementById('loader-pct');
+
+    paths.forEach((path) => {
+      const len = path.getTotalLength();
+      path.style.strokeDasharray = len;
+      path.style.strokeDashoffset = len;
+      path.dataset.len = len;
+    });
+
+    let p = 0;
+    let last = performance.now();
+    let holdAtFullUntil = null;
+
+    function tick(t) {
+      const dt = (t - last) * 0.001;
+      last = t;
+
+      if (holdAtFullUntil === null) {
+        p += 18 * dt * (1 - p / 120);
+        if (p >= 100) {
+          p = 100;
+          holdAtFullUntil = t + 1400;
+        }
+      }
+
+      const f = p / 100;
+      const N = paths.length;
+      paths.forEach((el, i) => {
+        const s = i / N;
+        const e = (i + 1) / N;
+        const local = Math.max(0, Math.min(1, (f - s) / (e - s)));
+        el.style.strokeDashoffset = (1 - local) * Number(el.dataset.len);
+        el.classList.toggle('drawn', local >= 0.98);
+      });
+
+      dots.forEach((dot, i) => {
+        const threshold = 0.25 + (i / dots.length) * 0.75;
+        dot.classList.toggle('lit', f >= threshold);
+      });
+
+      fill.style.width = p + '%';
+      pctEl.textContent = Math.round(p) + '%';
+
+      if (holdAtFullUntil && t >= holdAtFullUntil) {
+        intro.classList.add('done');
+        setTimeout(() => intro.remove(), 900);
+        return;
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  })();
+})();
 
 // ────────────────────────────────────────────────
 // RENDER — converts structured data → HTML string
